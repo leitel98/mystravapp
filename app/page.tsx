@@ -2,17 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Link from "next/link";
 import { AppDispatch, useAppSelector } from "./redux/store";
 import { logIn, logOut } from "./redux/features/auth-slice";
-import stravaApi from "./services/axiosService";
-
-const athleteId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
+import { getAthleteActivities, getAthleteInfo } from "./services/axiosService";
 
 export default function Home() {
   const [newUsername, setNewUsername] = useState<string>("");
   const [athlete, setAthlete] = useState<any>(null);
-  const [routes, setRoutes] = useState<any>([]);
+  const [activities, setActivities] = useState<any>([]);
 
   const dispatch = useDispatch<AppDispatch>();
   const username = useAppSelector((state) => state.authReducer.value.username);
@@ -26,31 +23,35 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Example: Get athlete details
-    stravaApi
-      .get("/athlete")
-      .then((response) => {
-        setAthlete(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching athlete details:", error.response?.data);
-      });
+    const fetchData = async () => {
+      try {
+        const fetchedAthlete = await getAthleteInfo();
+        setAthlete(fetchedAthlete);
+      } catch (error) {
+        // Handle errors as needed
+        console.error("Error fetching athlete info:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
-    // Example: Get athlete routes list
-    stravaApi
-      .get(`/athletes/${athleteId}/routes?per_page=5`)
-      .then((response) => {
-        setRoutes((prev: any) => [...prev, response?.data]);
-      })
-      .catch((error) => {
-        console.error("Error fetching athlete routes:", error.message);
-      });
+    const fetchActivities = async () => {
+      try {
+        const fetchedActivities = await getAthleteActivities();
+        setActivities(fetchedActivities);
+      } catch (error) {
+        // Handle errors as needed
+        console.error("Error fetching athlete activities:", error);
+      }
+    };
+
+    fetchActivities();
   }, []);
 
   console.log(athlete);
-  console.log(routes);
+  console.log(activities);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
