@@ -9,9 +9,9 @@ import {
 import moment from "moment";
 
 export const usePast = () => {
-  const athlete = useAppSelector((state) => state.stravaData.athlete);
-  const activities = useAppSelector((state) => state.stravaData.activities);
-  const activeMonth = useAppSelector((state) => state.stravaData.activeMonth);
+  const athlete = useAppSelector((state) => state.stravaDataReducer.athlete);
+  const activities = useAppSelector((state) => state.stravaDataReducer.activities);
+  const activeMonth = useAppSelector((state) => state.stravaDataReducer.activeMonth);
 
   const dispatch = useDispatch<AppDispatch>();
 

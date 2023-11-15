@@ -30,7 +30,7 @@ const initialState = {
   } as ActiveMonthT,
 } as InitialStateT;
 
-const stravaData: any = createSlice({
+const stravaData = createSlice({
   name: "stravaData",
   initialState,
   reducers: {

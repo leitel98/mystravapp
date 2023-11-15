@@ -13,8 +13,8 @@ import {
 } from "../redux/features/strava-slice";
 
 export const useHome = () => {
-  const athlete = useAppSelector((state) => state.stravaData.athlete);
-  const activities = useAppSelector((state) => state.stravaData.activities);
+  const athlete = useAppSelector((state) => state.stravaDataReducer.athlete);
+  const activities = useAppSelector((state) => state.stravaDataReducer.activities);
 
   const dispatch = useDispatch<AppDispatch>();
 
