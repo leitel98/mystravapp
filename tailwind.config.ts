@@ -16,7 +16,7 @@ const config: Config = {
       colors: {
         mygolden: "#F5B841",
         myindigo: "#031927",
-        mypumpkin: "#BA1200",
+        mypumpkin: "#111D4A",
         darksky: "#508AA8"
       }
     },

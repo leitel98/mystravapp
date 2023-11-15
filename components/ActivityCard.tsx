@@ -14,7 +14,7 @@ type ActivityCardT = {
 
 const ActivityCard: FC<ActivityCardT> = ({ activity, title }) => {
   return (
-    <section className="flex flex-col capitalize font-semibold gap-2 items-start bg-mygolden text-myindigo px-10 py-5 rounded-lg border border-white">
+    <section className="flex flex-col capitalize font-semibold gap-2 items-start bg-blue-100 text-myindigo px-10 py-5 rounded-lg border border-white">
       <h2 className="font-bold text-xl w-full text-center pb-1 border-b-2 border-mypumpkin">
         {title}
       </h2>

@@ -8,6 +8,9 @@ export type ActivityT = {
   start_date_local: Date;
   total_elevation_gain: number;
 };
+const currentTimestampInSeconds = Math.floor(Date.now() / 1000);
+const threeMonthsAgoTimestamp =
+  currentTimestampInSeconds - 3 * 30 * 24 * 60 * 60; // Assuming 30 days per month
 
 export type ActiveMonthT = {
   name: string | null;
@@ -26,8 +29,8 @@ const initialState: InitialStateT = {
   activities: [],
   activeMonth: {
     name: null,
-    before: 0,
-    after: 0,
+    before: currentTimestampInSeconds,
+    after: threeMonthsAgoTimestamp,
   },
 };
 

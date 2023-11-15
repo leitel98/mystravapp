@@ -59,7 +59,7 @@ export const getStravaActivitiesPast = async (
   endDate: number
 ) => {
   const apiUrl = "https://www.strava.com/api/v3/athlete/activities";
-
+  
   try {
     const response = await axios.get(apiUrl, {
       headers: {
