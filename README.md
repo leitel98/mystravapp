@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+### You need to create a .env file with your client id and your client secret
+
 First, run the development server:
 
 ```bash
