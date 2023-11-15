@@ -13,11 +13,13 @@ const STRAVA_REFRESH_TOKEN = process.env.NEXT_PUBLIC_STRAVA_REFRESH_TOKEN;
 interface StravaTokens {
   access_token: string;
   refresh_token: string;
+  expires_at: number; // Adding expires_at field to store the expiration timestamp
 }
 
 let stravaTokens: StravaTokens = {
   access_token: STRAVA_ACCESS_TOKEN || "",
   refresh_token: STRAVA_REFRESH_TOKEN || "",
+  expires_at: 0, // Initial expiration timestamp, assuming token is already expired
 };
 
 const updateTokens = (tokens: StravaTokens) => {
@@ -32,10 +34,24 @@ const getAuthorizationHeader = () => {
   };
 };
 
+const ensureValidAccessToken = async (): Promise<void> => {
+  if (!stravaTokens.access_token || isAccessTokenExpired()) {
+    // Access token is missing or expired, refresh it
+    await refreshAccessToken();
+  }
+};
+
+const isAccessTokenExpired = (): boolean => {
+  const currentTime = Math.floor(Date.now() / 1000);
+  return (stravaTokens.access_token &&
+    stravaTokens.expires_at < currentTime) as boolean;
+};
+
 export const makeAuthenticatedRequest = async (
   config: AxiosRequestConfig
 ): Promise<any> => {
   try {
+    await ensureValidAccessToken(); // Ensure a valid access token before making the request
     const response = await stravaApi({
       ...config,
       ...getAuthorizationHeader(),
@@ -43,23 +59,10 @@ export const makeAuthenticatedRequest = async (
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 401 && stravaTokens.refresh_token) {
-      try {
-        // Attempt to refresh the access token
-        const refreshedTokens = await refreshAccessToken();
-        updateTokens(refreshedTokens);
-
-        // Retry the original request with the new access token
-        const response = await stravaApi({
-          ...config,
-          ...getAuthorizationHeader(),
-        });
-        return response.data;
-      } catch (refreshError) {
-        // Handle error refreshing access token
-        console.error("Error refreshing access token:", refreshError);
-        throw refreshError;
-      }
+    if (axiosError.response?.status === 401) {
+      // If the request still fails, even after refreshing the token, handle the error
+      console.error("Error making authenticated request:", axiosError);
+      throw axiosError.response?.data || axiosError.message || axiosError;
     } else {
       // Handle other errors
       throw axiosError.response?.data || axiosError.message || axiosError;
@@ -67,7 +70,7 @@ export const makeAuthenticatedRequest = async (
   }
 };
 
-const refreshAccessToken = async (): Promise<StravaTokens> => {
+const refreshAccessToken = async (): Promise<void> => {
   try {
     const response = await stravaApi.post("/oauth/token", null, {
       params: {
@@ -77,7 +80,15 @@ const refreshAccessToken = async (): Promise<StravaTokens> => {
         refresh_token: stravaTokens.refresh_token,
       },
     });
-    return response.data;
+
+    const expiresIn = response.data.expires_in; // Expiration time in seconds
+    const expiresAt = Math.floor(Date.now() / 1000) + expiresIn;
+
+    updateTokens({
+      access_token: response.data.access_token,
+      refresh_token: response.data.refresh_token,
+      expires_at: expiresAt,
+    });
   } catch (error) {
     // Handle error refreshing access token
     console.error("Error refreshing access token:", error);
