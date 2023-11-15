@@ -48,12 +48,12 @@ const stravaData = createSlice({
     setActivitiesData: (state, action: PayloadAction<ActivityT[]>) => {
       return {
         ...state,
-        activities: action.payload.map((activity) => ({
-          name: activity.name,
-          distance: Math.round(activity.distance / 1000),
-          start_date_local: activity.start_date_local,
-          total_elevation_gain: activity.total_elevation_gain,
-          moving_time: activity.moving_time,
+        activities: action?.payload.map((activity) => ({
+          name: activity?.name || "",
+          distance: Math.round(activity?.distance / 1000) || 0,
+          start_date_local: activity?.start_date_local || "",
+          total_elevation_gain: activity?.total_elevation_gain || 0,
+          moving_time: activity?.moving_time || 0,
         })),
       };
     },
