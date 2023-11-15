@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./features/auth-slice";
+import stravaData from "./features/strava-slice";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 export const store = configureStore({
   reducer: {
-    authReducer,
+    stravaData,
   },
 });
 
