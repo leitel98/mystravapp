@@ -4,10 +4,16 @@ import { ActivityCard, HeroCard, Spinner } from "@/components/index";
 import { usePast } from "../hooks/usePast";
 import { months } from "@/utils/constants";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import { ActivityT } from "../redux/features/strava-slice";
 
 const Past: React.FC = () => {
-  const { athlete, activeMonth, changeMonth, filteredActivities } =
-    usePast();
+  const {
+    athlete,
+    activeMonth,
+    changeMonth,
+    filteredActivities,
+    reducedActivities,
+  } = usePast();
 
   return (
     <>
@@ -36,15 +42,15 @@ const Past: React.FC = () => {
         {athlete ? (
           <section className="flex flex-col max-w-6xl h-full items-center gap-10">
             <HeroCard athlete={athlete} />
-            {JSON.stringify(activeMonth)}
             {activeMonth.name != null ? (
               <p className="text-3xl font-bold">{activeMonth.name}</p>
             ) : (
               <p className="text-3xl font-bold">Past 3 months</p>
             )}
+            {JSON.stringify(reducedActivities)}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 px-8">
               {filteredActivities.length > 0 &&
-                filteredActivities.map((activity, idx) => (
+                filteredActivities.map((activity: ActivityT, idx: number) => (
                   <ActivityCard
                     activity={activity}
                     title="Activity"

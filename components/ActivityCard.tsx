@@ -32,7 +32,7 @@ const ActivityCard: FC<ActivityCardT> = ({ activity, title }) => {
       </div>
       <div className="flex items-center gap-2">
         <GlobeAmericasIcon width={30} height={30} />
-        <p>distance: {activity.distance} Mts</p>
+        <p>distance: {activity.distance} Km</p>
       </div>
       <div className="flex items-center gap-2">
         <ChartBarIcon width={30} height={30} />

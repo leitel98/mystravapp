@@ -7,7 +7,9 @@ export type ActivityT = {
   distance: number;
   start_date_local: Date;
   total_elevation_gain: number;
+  moving_time: number;
 };
+
 const currentTimestampInSeconds = Math.floor(Date.now() / 1000);
 const threeMonthsAgoTimestamp =
   currentTimestampInSeconds - 3 * 30 * 24 * 60 * 60; // Assuming 30 days per month
@@ -34,7 +36,7 @@ const initialState: InitialStateT = {
   },
 };
 
-const stravaData = createSlice({
+const stravaData: any = createSlice({
   name: "stravaData",
   initialState,
   reducers: {
@@ -54,9 +56,10 @@ const stravaData = createSlice({
         ...state,
         activities: action.payload.map((activity) => ({
           name: activity.name,
-          distance: activity.distance,
+          distance: Math.round(activity.distance / 1000),
           start_date_local: activity.start_date_local,
           total_elevation_gain: activity.total_elevation_gain,
+          moving_time: activity.moving_time,
         })),
       };
     },
