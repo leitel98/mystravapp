@@ -7,21 +7,22 @@ import {
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 
-type LastActivityCardT = {
+type ActivityCardT = {
   activity: ActivityT;
+  title: string;
 };
 
-const LastActivityCard: FC<LastActivityCardT> = ({ activity }) => {
+const ActivityCard: FC<ActivityCardT> = ({ activity, title }) => {
   return (
     <section className="flex flex-col capitalize font-semibold gap-2 items-start bg-mygolden text-myindigo px-10 py-5 rounded-lg border border-white">
       <h2 className="font-bold text-xl w-full text-center pb-1 border-b-2 border-mypumpkin">
-        This is your last activity
+        {title}
       </h2>
       <div className="flex items-center gap-2">
         <PencilSquareIcon width={30} height={30} />
         <p>name: {activity?.name}</p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 whitespace-nowrap">
         <CalendarIcon width={30} height={30} />
         <p>date: {activity.start_date_local.toString().split("T")[0]}</p>
         {" - "}
@@ -31,7 +32,7 @@ const LastActivityCard: FC<LastActivityCardT> = ({ activity }) => {
       </div>
       <div className="flex items-center gap-2">
         <GlobeAmericasIcon width={30} height={30} />
-        <p>distance: {activity.distance} Km</p>
+        <p>distance: {activity.distance} Mts</p>
       </div>
       <div className="flex items-center gap-2">
         <ChartBarIcon width={30} height={30} />
@@ -41,4 +42,4 @@ const LastActivityCard: FC<LastActivityCardT> = ({ activity }) => {
   );
 };
 
-export default LastActivityCard;
+export default ActivityCard;
