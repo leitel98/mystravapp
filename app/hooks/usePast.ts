@@ -10,11 +10,13 @@ import {
 import {
   setActivitiesData,
   setAthleteData,
+  setActiveMonth,
 } from "../redux/features/strava-slice";
 
 export const usePast = () => {
   const athlete = useAppSelector((state) => state.stravaData.athlete);
   const activities = useAppSelector((state) => state.stravaData.activities);
+  const activeMonth = useAppSelector((state) => state.stravaData.activeMonth);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -34,11 +36,22 @@ export const usePast = () => {
           const threeMonthsAgoTimestamp =
             currentTimestampInSeconds - 3 * 30 * 24 * 60 * 60; // Assuming 30 days per month
 
-          const fetchedActivities = await getStravaActivitiesPast(
-            accessToken,
-            threeMonthsAgoTimestamp,
-            currentTimestampInSeconds,
-          );
+          let fetchedActivities; // Declare the variable outside the if statement
+
+          if (!activeMonth.name) {
+            fetchedActivities = await getStravaActivitiesPast(
+              accessToken,
+              threeMonthsAgoTimestamp,
+              currentTimestampInSeconds
+            );
+          } else {
+            fetchedActivities = await getStravaActivitiesPast(
+              accessToken,
+              activeMonth.before,
+              activeMonth.after
+            );
+          }
+
           const fetchedAthlete = await getStravaAthleteInfo(accessToken);
           dispatch(
             setAthleteData({
@@ -60,6 +73,6 @@ export const usePast = () => {
     };
 
     fetchData();
-  }, []);
-  return { athlete, activities };
+  }, [activeMonth]);
+  return { athlete, activities, setActiveMonth };
 };

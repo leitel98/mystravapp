@@ -9,7 +9,7 @@ const Home: React.FC = () => {
   const { athlete, activities } = useHome();
 
   return (
-    <main className="container flex w-full items-center justify-center h-full">
+    <main className="container flex w-full mx-auto items-center justify-center h-screen px-4 pt-4 md:pt-10 md:px-0">
       {athlete ? (
         <section className="flex flex-col max-w-5xl h-full items-center gap-10">
           <HeroCard athlete={athlete} />

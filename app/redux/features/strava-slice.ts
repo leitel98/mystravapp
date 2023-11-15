@@ -9,14 +9,26 @@ export type ActivityT = {
   total_elevation_gain: number;
 };
 
+export type ActiveMonthT = {
+  name: string | null;
+  before: number;
+  after: number;
+};
+
 type InitialStateT = {
   athlete: AthleteT;
   activities: ActivityT[];
+  activeMonth: ActiveMonthT;
 };
 
 const initialState: InitialStateT = {
   athlete: null,
   activities: [],
+  activeMonth: {
+    name: null,
+    before: 0,
+    after: 0,
+  },
 };
 
 const stravaData = createSlice({
@@ -45,8 +57,15 @@ const stravaData = createSlice({
         })),
       };
     },
+    setActiveMonth: (state, action: PayloadAction<ActiveMonthT>) => {
+      return {
+        ...state,
+        activeMonth: action.payload,
+      };
+    },
   },
 });
 
-export const { setAthleteData, setActivitiesData } = stravaData.actions;
+export const { setAthleteData, setActivitiesData, setActiveMonth } =
+  stravaData.actions;
 export default stravaData.reducer;
