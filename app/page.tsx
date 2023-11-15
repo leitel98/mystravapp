@@ -1,72 +1,64 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch, useAppSelector } from "./redux/store";
-import { logIn, logOut } from "./redux/features/auth-slice";
-import { getAthleteActivities, getAthleteInfo } from "./services/axiosService";
+import { useEffect, useState } from "react";
+import {
+  getStravaAuthUrl,
+  getStravaAccessToken,
+  getStravaActivities,
+  getStravaAthleteInfo,
+} from "./services/axiosService";
 
-export default function Home() {
-  const [newUsername, setNewUsername] = useState<string>("");
+const Home: React.FC = () => {
   const [athlete, setAthlete] = useState<any>(null);
   const [activities, setActivities] = useState<any>([]);
 
-  const dispatch = useDispatch<AppDispatch>();
-  const username = useAppSelector((state) => state.authReducer.value.username);
-
-  const onClickLogIn = () => {
-    dispatch(logIn(newUsername));
-  };
-
-  const onClickLogOut = () => {
-    dispatch(logOut());
-  };
-
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const fetchedAthlete = await getAthleteInfo();
-        setAthlete(fetchedAthlete);
-      } catch (error) {
-        // Handle errors as needed
-        console.error("Error fetching athlete info:", error);
+      // Step 1: Check if there's an authorization code in the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+
+      if (code) {
+        try {
+          // Step 2: Use the authorization code to get the access token
+          const accessToken = await getStravaAccessToken(code);
+
+          // Step 3: Use the access token to get athlete information
+          const fetchedActivities = await getStravaActivities(accessToken);
+          const fetchedAthlete = await getStravaAthleteInfo(accessToken);
+          setActivities(fetchedActivities);
+          setAthlete(fetchedAthlete);
+
+          // Step 4: Display the athlete information (you can customize this part)
+        } catch (error) {
+          console.error("Error fetching Strava athlete information:", error);
+          // Handle the error as needed
+        }
+      } else {
+        // Step 5: If there's no code, redirect the user to the Strava authentication page
+        window.location.href = getStravaAuthUrl();
       }
     };
 
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        const fetchedActivities = await getAthleteActivities();
-        setActivities(fetchedActivities);
-      } catch (error) {
-        // Handle errors as needed
-        console.error("Error fetching athlete activities:", error);
-      }
-    };
-
-    fetchActivities();
-  }, []);
-
-  console.log(athlete);
-  console.log(activities);
+  console.log("Activities Information:", activities);
+  console.log("Athlete info:", athlete);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div>
-        <input
-          className="text-black"
-          type="text"
-          onChange={(e) => setNewUsername(e.target.value)}
-        />
-        <br />
-        <button onClick={onClickLogIn}>Log In</button>
-        <br />
-        <button onClick={onClickLogOut}>Log Out</button>
-        <p>Username: {username}</p>
-      </div>
-    </main>
+    <div className="container flex w-full items-center justify-center h-screen">
+      {athlete ? (
+        <div className="mx-auto flex flex-col items-start space-y-4">
+          <p>
+            Athlete name: {athlete?.firstname} {athlete?.lastname}
+          </p>
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
   );
-}
+};
+
+export default Home;

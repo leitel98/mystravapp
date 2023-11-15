@@ -1,29 +1,65 @@
-import { makeAuthenticatedRequest } from "@/utils/stravaUtils";
+import axios from "axios";
+import queryString from "query-string";
 
-export const getAthleteInfo = async (): Promise<any> => {
+const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
+const secret = process.env.NEXT_PUBLIC_STRAVA_CLIENT_SECRET;
+
+const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=http://localhost:3000&response_type=code&scope=read,activity:read_all&approval_prompt=force`;
+
+const stravaTokenUrl = "https://www.strava.com/oauth/token";
+
+export const getStravaAuthUrl = () => {
+  return stravaAuthUrl;
+};
+
+export const getStravaAccessToken = async (code: string) => {
+  const params = {
+    client_id: clientId,
+    client_secret: secret,
+    code,
+    grant_type: "authorization_code",
+  };
+
   try {
-    const response = await makeAuthenticatedRequest({
-      method: "get",
-      url: "/athlete",
-    });
-    return response;
+    const response = await axios.post(
+      stravaTokenUrl,
+      queryString.stringify(params)
+    );
+    return response.data.access_token;
   } catch (error) {
-    // Handle errors as needed
-    console.error("Error fetching athlete info:", error);
+    console.error("Error getting Strava access token:", error);
     throw error;
   }
 };
 
-export const getAthleteActivities = async (): Promise<any> => {
+export const getStravaActivities = async (accessToken: string) => {
+  const apiUrl = "https://www.strava.com/api/v3/athlete/activities";
+
   try {
-    const response = await makeAuthenticatedRequest({
-      method: "get",
-      url: "/athlete/activities",
+    const response = await axios.get(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
-    return response;
+    return response.data;
   } catch (error) {
-    // Handle errors as needed
-    console.error("Error fetching athlete activities:", error);
+    console.error("Error fetching Strava activities:", error);
+    throw error;
+  }
+};
+
+export const getStravaAthleteInfo = async (accessToken: string) => {
+  const apiUrl = 'https://www.strava.com/api/v3/athlete';
+
+  try {
+    const response = await axios.get(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching Strava athlete information:', error);
     throw error;
   }
 };
