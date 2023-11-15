@@ -17,11 +17,11 @@ const Home: React.FC = () => {
             <ActivityCard activity={activities[0]} title="My last activity" />
           )}
           <Link
-            className="flex items-center hover:scale-105 transition-all duration-150 gap-4 bg-mypumpkin px-6 py-3 border border-white rounded-md"
+            className="flex items-center hover:scale-105 transition-all duration-150 gap-4 bg-orange-600 px-6 py-3 border border-white rounded-md"
             href="/past"
           >
             <ArrowRightIcon width={15} height={15} />
-            <p>See past three months</p>
+            <p>Go to your monthly stats!</p>
           </Link>
         </section>
       ) : (

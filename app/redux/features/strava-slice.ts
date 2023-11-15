@@ -10,14 +10,9 @@ export type ActivityT = {
   moving_time: number;
 };
 
-const currentTimestampInSeconds = Math.floor(Date.now() / 1000);
-const threeMonthsAgoTimestamp =
-  currentTimestampInSeconds - 3 * 30 * 24 * 60 * 60; // Assuming 30 days per month
-
 export type ActiveMonthT = {
   name: string | null;
-  before: number;
-  after: number;
+  id: number;
 };
 
 type InitialStateT = {
@@ -26,15 +21,14 @@ type InitialStateT = {
   activeMonth: ActiveMonthT;
 };
 
-const initialState: InitialStateT = {
-  athlete: null,
-  activities: [],
+const initialState = {
+  athlete: null as AthleteT,
+  activities: [] as ActivityT[],
   activeMonth: {
     name: null,
-    before: currentTimestampInSeconds,
-    after: threeMonthsAgoTimestamp,
-  },
-};
+    id: 0,
+  } as ActiveMonthT,
+} as InitialStateT;
 
 const stravaData: any = createSlice({
   name: "stravaData",

@@ -47,7 +47,9 @@ export const useHome = () => {
         }
       } else {
         // Step 5: If there's no code, redirect the user to the Strava authentication page
-        window.location.href = getStravaAuthUrl();
+        if (!athlete || !activities) {
+          window.location.href = getStravaAuthUrl();
+        }
       }
     };
 
