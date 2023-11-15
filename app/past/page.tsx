@@ -44,15 +44,15 @@ const Past: React.FC = () => {
           </h1>
         </aside>
       </nav>
-      <main className="container flex w-full mx-auto items-center justify-center h-screen px-4 pt-4 md:pt-10 md:px-0">
+      <main className="container relative flex w-full mx-auto items-center justify-center h-screen px-4 pt-4 md:pt-10 md:px-0">
         {athlete ? (
           <section className="flex flex-col max-w-6xl h-full items-center gap-10">
-            <div className="relative flex w-full items-center">
-              <Link href="/" className="absolute top-0 left-0">
-                <ArrowLeftIcon width={30} height={30} />
-              </Link>
+            <div className="flex w-full items-center">
               <HeroCard athlete={athlete} />
             </div>
+            <Link href="/" className="absolute top-0 left-0">
+              <ArrowLeftIcon width={30} height={30} />
+            </Link>
             {activeMonth.name != null ? (
               <div className="flex items-center gap-10">
                 <button
@@ -86,7 +86,21 @@ const Past: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <p className="text-3xl font-bold">Past 3 months</p>
+              <div className="flex flex-col gap-4 items-center">
+                <p className="text-3xl font-bold">Past 3 months</p>
+                <button
+                  onClick={() =>
+                    changeMonth(
+                      months.find(
+                        (month) => month.id === new Date().getMonth() + 1
+                      ) as ActiveMonthT
+                    )
+                  }
+                  className="xl:hidden px-4 py-2 rounded-md bg-orange-500"
+                >
+                  Set actual month
+                </button>
+              </div>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 px-8">
               {filteredActivities.length > 0 &&
