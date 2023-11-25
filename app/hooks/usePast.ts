@@ -3,6 +3,7 @@ import { AppDispatch, useAppSelector } from "../redux/store";
 
 import {
   setActiveMonth,
+  setActiveYear,
   ActiveMonthT,
   ActivityT,
 } from "../redux/features/strava-slice";
@@ -10,13 +11,24 @@ import moment from "moment";
 
 export const usePast = () => {
   const athlete = useAppSelector((state) => state.stravaDataReducer.athlete);
-  const activities = useAppSelector((state) => state.stravaDataReducer.activities);
-  const activeMonth = useAppSelector((state) => state.stravaDataReducer.activeMonth);
+  const activities = useAppSelector(
+    (state) => state.stravaDataReducer.activities
+  );
+  const activeMonth = useAppSelector(
+    (state) => state.stravaDataReducer.activeMonth
+  );
+  const activeYear = useAppSelector(
+    (state) => state.stravaDataReducer.activeYear
+  );
 
   const dispatch = useDispatch<AppDispatch>();
 
   const changeMonth = (month: ActiveMonthT) => {
     dispatch(setActiveMonth(month));
+  };
+
+  const changeYear = (year: number) => {
+    dispatch(setActiveYear(year));
   };
 
   const isWithinLast3Months = (dateString: Date) => {
@@ -36,9 +48,10 @@ export const usePast = () => {
 
     // Extract the month number from the activity's start_date_local
     const activityMonth = moment(activity.start_date_local).month() + 1; // Adding 1 because getMonth() returns 0-based index
+    const activityYear = moment(activity.start_date_local).year(); // Adding 1 because getMonth() returns 0-based index
 
     // Compare the month number with the activeMonth id
-    return activityMonth === activeMonth.id;
+    return activityMonth === activeMonth.id && activityYear === activeYear;
   });
 
   const reducedActivities = filteredActivities.reduce(
@@ -62,5 +75,6 @@ export const usePast = () => {
     changeMonth,
     filteredActivities,
     reducedActivities,
+    changeYear
   };
 };

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import moment from "moment";
 
 export type AthleteT = { name: string; lastname: string } | null;
 
@@ -19,11 +20,13 @@ type InitialStateT = {
   athlete: AthleteT;
   activities: ActivityT[];
   activeMonth: ActiveMonthT;
+  activeYear: number;
 };
 
 const initialState = {
   athlete: null as AthleteT,
   activities: [] as ActivityT[],
+  activeYear: moment().year(),
   activeMonth: {
     name: null,
     id: 0,
@@ -63,9 +66,19 @@ const stravaData = createSlice({
         activeMonth: action.payload,
       };
     },
+    setActiveYear: (state, action: PayloadAction<number>) => {
+      return {
+        ...state,
+        activeYear: action.payload,
+      };
+    },
   },
 });
 
-export const { setAthleteData, setActivitiesData, setActiveMonth } =
-  stravaData.actions;
+export const {
+  setAthleteData,
+  setActivitiesData,
+  setActiveMonth,
+  setActiveYear,
+} = stravaData.actions;
 export default stravaData.reducer;
