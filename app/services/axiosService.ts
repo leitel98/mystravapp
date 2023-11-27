@@ -5,8 +5,8 @@ import queryString from "query-string";
 const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
 const secret = process.env.NEXT_PUBLIC_STRAVA_CLIENT_SECRET;
 
-const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=http://mystravapp.vercel.app&response_type=code&scope=read,activity:read_all&approval_prompt=force`;
-const stravaAuthUrlPast = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=http://mystravapp.vercel.app/past&response_type=code&scope=read,activity:read_all&approval_prompt=force`;
+const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=mystravapp.vercel.app&response_type=code&scope=read,activity:read_all&approval_prompt=force`;
+const stravaAuthUrlPast = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=/mystravapp.vercel.app/past&response_type=code&scope=read,activity:read_all&approval_prompt=force`;
 
 const stravaTokenUrl = "https://www.strava.com/oauth/token";
 
