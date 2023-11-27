@@ -5,9 +5,9 @@ import {
   setActiveMonth,
   setActiveYear,
   ActiveMonthT,
-  ActivityT,
 } from "../redux/features/strava-slice";
 import moment from "moment";
+import { useMemo } from "react";
 
 export const usePast = () => {
   const athlete = useAppSelector((state) => state.stravaDataReducer.athlete);
@@ -40,19 +40,21 @@ export const usePast = () => {
     return activityDate >= threeMonthsAgo && activityDate <= currentDate;
   };
 
-  const filteredActivities = activities.filter((activity: ActivityT) => {
-    if (activeMonth.name === null) {
-      // Keep all activities if activeMonth.name is null
-      return isWithinLast3Months(activity.start_date_local);
-    }
+  const filteredActivities = useMemo(() => {
+    return activities.filter((activity) => {
+      if (activeMonth.name === null) {
+        // Keep all activities if activeMonth.name is null
+        return isWithinLast3Months(activity.start_date_local);
+      }
 
-    // Extract the month number from the activity's start_date_local
-    const activityMonth = moment(activity.start_date_local).month() + 1; // Adding 1 because getMonth() returns 0-based index
-    const activityYear = moment(activity.start_date_local).year(); // Adding 1 because getMonth() returns 0-based index
+      // Extract the month number and year from the activity's start_date_local
+      const activityMonth = moment(activity.start_date_local).month() + 1; // Adding 1 because getMonth() returns 0-based index
+      const activityYear = moment(activity.start_date_local).year();
 
-    // Compare the month number with the activeMonth id
-    return activityMonth === activeMonth.id && activityYear === activeYear;
-  });
+      // Compare the month number with the activeMonth id and the year with activeYear
+      return activityMonth === activeMonth.id && activityYear === activeYear;
+    });
+  }, [activities, activeMonth, activeYear]);
 
   const reducedActivities = filteredActivities.reduce(
     (accumulator: any, activity: any) => {
@@ -75,6 +77,7 @@ export const usePast = () => {
     changeMonth,
     filteredActivities,
     reducedActivities,
-    changeYear
+    changeYear,
+    activeYear,
   };
 };

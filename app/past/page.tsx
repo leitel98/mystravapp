@@ -3,9 +3,10 @@
 import {
   ActivityCard,
   HeroCard,
+  MonthSelector,
   MonthToggler,
-  NavBar,
   Spinner,
+  YearToggler,
 } from "@/components/index";
 import { usePast } from "../hooks/usePast";
 import { ActiveMonthT, ActivityT } from "../redux/features/strava-slice";
@@ -25,23 +26,26 @@ const Past: React.FC = () => {
     changeMonth,
     filteredActivities,
     reducedActivities,
+    activeYear,
+    changeYear,
   } = usePast();
 
   return (
     <>
-      <NavBar
+      <MonthSelector
         months={months}
         activeMonth={activeMonth}
         changeMonth={changeMonth}
       />
-      <main className='container relative flex w-full mx-auto items-center justify-center h-screen px-4 pt-4 md:pt-10 md:px-0'>
+      <main className='container flex w-full items-center justify-center h-full my-16'>
         {athlete ? (
-          <section className='flex flex-col max-w-6xl h-full items-center gap-10'>
+          <section className='flex flex-col max-w-6xl items-center gap-10 relative px-4'>
             <HeroCard athlete={athlete} />
-            <Link href='/' className='absolute top-0 left-0'>
+            <Link href='/' className='absolute -top-8 left-4 text-white'>
               <ArrowLeftIcon width={30} height={30} />
             </Link>
 
+            <YearToggler changeYear={changeYear} activeYear={activeYear} />
             {activeMonth.name != null ? (
               <MonthToggler
                 changeMonth={changeMonth}
@@ -50,7 +54,7 @@ const Past: React.FC = () => {
               />
             ) : (
               <div className='flex flex-col gap-4 items-center'>
-                <p className='text-3xl font-bold'>Past 3 months</p>
+                <p className='text-3xl font-bold text-white'>Past 3 months</p>
                 <button
                   onClick={() =>
                     changeMonth(

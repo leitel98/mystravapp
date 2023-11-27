@@ -1,6 +1,7 @@
 import axios from "axios";
 import queryString from "query-string";
 
+//TODO: can i get this from the redirect?
 const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
 const secret = process.env.NEXT_PUBLIC_STRAVA_CLIENT_SECRET;
 

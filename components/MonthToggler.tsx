@@ -29,7 +29,7 @@ const MonthToggler: React.FC<MonthTogglerProps> = ({
       >
         <ArrowLeftIcon width={30} height={30} />
       </button>
-      <p className='text-3xl font-bold'>{activeMonth.name}</p>
+      <p className='text-3xl font-bold text-white'>{activeMonth.name}</p>
       <button
         onClick={() =>
           changeMonth(

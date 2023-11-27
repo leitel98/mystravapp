@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import { Footer, Header } from "@/components";
 import { ReduxProvider } from "./redux/provider";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Lucas Eitel assignment",
@@ -13,9 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <Header />
+          {children}
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   );

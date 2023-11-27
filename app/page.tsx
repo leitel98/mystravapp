@@ -9,9 +9,9 @@ const Home: React.FC = () => {
   const { athlete, activities } = useHome();
 
   return (
-    <main className="container flex w-full mx-auto items-center justify-center h-screen px-4 pt-4 md:pt-10 md:px-0">
+    <main className="container flex w-full mx-auto items-center justify-center h-screen">
       {athlete ? (
-        <section className="flex flex-col max-w-5xl h-full items-center gap-10">
+        <section className="flex flex-col max-w-5xl items-center gap-10">
           <HeroCard athlete={athlete} />
           {activities.length > 0 && (
             <ActivityCard activity={activities[0]} title="My last activity" />
