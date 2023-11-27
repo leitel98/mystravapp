@@ -70,14 +70,19 @@ const Past: React.FC = () => {
               </div>
             )}
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 px-8'>
-              {filteredActivities.length > 0 &&
+              {filteredActivities.length > 0 ? (
                 filteredActivities.map((activity: ActivityT, idx: number) => (
                   <ActivityCard
                     activity={activity}
                     title='Activity'
                     key={idx}
                   />
-                ))}
+                ))
+              ) : (
+                <p className='text-gray-300 text-2xl py-8 font-semibold text-center md:col-span-2 lg:col-span-3'>
+                  No activities to display...
+                </p>
+              )}
             </div>
             <div className='flex flex-col lg:flex-row items-start lg:items-center justify-center gap-8 px-6 py-3 bg-mygolden text-xl text-myindigo font-semibold rounded-md'>
               <div className='flex items-center gap-4'>
