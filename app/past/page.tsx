@@ -37,7 +37,7 @@ const Past: React.FC = () => {
         activeMonth={activeMonth}
         changeMonth={changeMonth}
       />
-      <main className='container flex w-full items-center justify-center h-full my-16'>
+      <main className='flex w-full items-center justify-center h-full my-16'>
         {athlete ? (
           <section className='flex flex-col max-w-6xl items-center gap-10 relative px-4'>
             <HeroCard athlete={athlete} />
