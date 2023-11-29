@@ -24,13 +24,13 @@ type InitialStateT = {
 };
 
 const initialState = {
-  athlete: null as AthleteT,
-  activities: [] as ActivityT[],
+  athlete: null,
+  activities: [],
   activeYear: moment().year(),
   activeMonth: {
     name: null,
     id: 0,
-  } as ActiveMonthT,
+  },
 } as InitialStateT;
 
 const stravaData = createSlice({
